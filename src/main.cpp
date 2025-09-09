@@ -98,6 +98,37 @@ private:
 
 };
 
+using OrderPointer = std::shared_ptr<Order>;
+using OrderPointers = std::list<OrderPointer>; // list is non-contiguous
+
+class OrderModify
+{
+public:
+    OrderModify(OrderId orderId, Side side, Price price, Quantity quantity) :
+        orderId_{ orderId },
+        price_{ price },
+        side_{ side },
+        quantity_{ quantity }
+    {}
+private:
+    OrderId GetOrderId() const { return orderId_; }
+    Price GetPrice() const { return price_; }
+    Side GetSide() const { return side_; }
+    Quantity GetQuantity() const { return quantity_; }
+
+    // public API to converting a new order with OrderModify into an entirely separate order
+    OrderPointer ToOrderPointer(OrderType type) const
+    {
+        return std::make_shared<Order>(type, GetOrderId(), GetSide(), GetPrice(), GetQuantity());
+    }
+private:
+    OrderId orderId_;
+    Price price_;
+    Side side_;
+    Quantity quantity_;
+};
+
+
 
 int main()
 {
