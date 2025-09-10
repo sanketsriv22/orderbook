@@ -6,6 +6,7 @@
         "unordered_map": "cpp"
     },
     "editor.fontFamily": "JetBrains Mono",
+    "editor.parameterHints.enabled": true,
     "debug.console.fontFamily": "Dank Mono",
     "markdown.preview.fontFamily": "-apple-system, Dank Mono, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif",
     "editor.defaultFormatter": "ms-vscode.cpptools"

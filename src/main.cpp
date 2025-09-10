@@ -217,30 +217,35 @@ private:
                 Quantity quantity = std::min(bid->GetRemainingQuantity(),ask->GetRemainingQuantity());
 
                 // now that we have matched quantity, we can fill the order
+                std::cout << "Trade found: Bid Price, Quantity: "<< bid->GetPrice() << ", " << bid->GetRemainingQuantity() << std::endl;
+                std::cout << "Trade found: Ask Price, Quantity: "<< ask->GetPrice() << ", " << ask->GetRemainingQuantity() << std::endl;
                 bid->Fill(quantity);
                 ask->Fill(quantity);
+                std::cout << "Remaining Bid Quantity after " << quantity << " traded: "<< bid->GetRemainingQuantity() << std::endl;
+                std::cout << "Remaining Ask Quantity after " << quantity << " traded: "<< ask->GetRemainingQuantity() << std::endl;
                
+                // add to trades vector
+                trades.push_back(Trade{
+                    TradeInfo{ bid->GetOrderId(), bid->GetPrice(), quantity },
+                    TradeInfo{ ask->GetOrderId(), ask->GetPrice(), quantity }
+                });
+
                 if (bid->IsFilled()) // is remaining quantity 0
                 {
-                    bids.pop_front();                 // remove from bids queue (OrderPointers std::vector)
                     orders_.erase(bid->GetOrderId()); // bid no longer valid
+                    bids.pop_front();                 // remove from this price bids's queue (OrderPointers std::vector)
                 }
 
                 if (ask->IsFilled())
                 {
-                    asks.pop_front();
                     orders_.erase(ask->GetOrderId());
+                    asks.pop_front();
                 }
 
                 if (bids.empty()) // no more bids with this price left
                     bids_.erase(bidPrice);
                 if (asks.empty()) // no more bids with this price left
                     asks_.erase(askPrice);
-
-                trades.push_back(Trade{
-                    TradeInfo{ bid->GetOrderId(), bid->GetPrice(), quantity },
-                    TradeInfo{ ask->GetOrderId(), ask->GetPrice(), quantity }
-                });
 
              }
         }
@@ -372,10 +377,16 @@ int main()
     std::cout << "Starting repo on an orderbook for trades." << std::endl;
 
     Orderbook orderbook;
-    const OrderId orderId = 1;
-    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId, Side::Buy, 100, 10));
+    const OrderId orderId1 = 1;
+    const OrderId orderId2 = 2;
+    const OrderId orderId3 = 3;
+    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId1, Side::Buy, 100, 10));
+    // orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId2, Side::Buy, 100, 20));
     std::cout << orderbook.Size() << std::endl;
-    orderbook.CancelOrder(orderId);
+    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId2, Side::Sell, 100, 20));
+    
+
+    // orderbook.CancelOrder(orderId2);
     std::cout << orderbook.Size() << std::endl;
     return 0;
 }
