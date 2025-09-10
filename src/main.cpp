@@ -259,6 +259,7 @@ private:
             if (order->GetOrderType() == OrderType::FillAndKill)
                 CancelOrder(order->GetOrderId());
         }
+        return trades;
     }
 public:
 
@@ -322,15 +323,59 @@ public:
 
     Trades MatchOrder(OrderModify order)
     {
+        // if no order found
         if (!orders_.contains(order.GetOrderId()))
             return {};
 
+        // find the existing order
+        const auto& [existingOrder, _] = orders_.at(order.GetOrderId());
 
+        // save orderType and cancel existing
+        OrderType existingOrderType = existingOrder->GetOrderType();
+        CancelOrder(existingOrder->GetOrderId());
+        
+        // add a new order
+        return AddOrder(order.ToOrderPointer(existingOrderType));
+    }
+
+    std::size_t Size() const { return orders_.size(); }
+
+    OrderBookLevelInfos GetOrderInfo() const
+    {
+        LevelInfos bidInfos, askInfos;
+        bidInfos.reserve(orders_.size());
+        askInfos.reserve(orders_.size());
+
+        auto CreateLevelInfos = [](Price price, const OrderPointers& orders)
+        {
+            return LevelInfo{ price, std::accumulate(orders.begin(), orders.end(), (Quantity)0,
+                [](std::size_t runningSum, const OrderPointer& order)
+                { return runningSum + order->GetRemainingQuantity(); }) };
+        };
+
+        // lambda function structure
+        // auto CreateLevelInfos = [](parameters) { function body };
+
+
+        for (const auto& [price, orders] : bids_)
+            bidInfos.push_back(CreateLevelInfos(price, orders));
+
+        for (const auto& [price, orders] : asks_)
+            askInfos.push_back(CreateLevelInfos(price, orders));
+
+        return OrderBookLevelInfos{ bidInfos, askInfos };
     }
 };
 
 int main()
 {
     std::cout << "Starting repo on an orderbook for trades." << std::endl;
+
+    Orderbook orderbook;
+    const OrderId orderId = 1;
+    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId, Side::Buy, 100, 10));
+    std::cout << orderbook.Size() << std::endl;
+    orderbook.CancelOrder(orderId);
+    std::cout << orderbook.Size() << std::endl;
     return 0;
 }
