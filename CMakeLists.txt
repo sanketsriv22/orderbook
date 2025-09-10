@@ -7,6 +7,11 @@ project(Orderbook LANGUAGES CXX C)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Debug support
+set(CMAKE_BUILD_TYPE DEBUG)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
+
+
 # Collect all sources (recursively)
 file(GLOB_RECURSE SOURCES
     CMAKE_CONFIGURE_DEPENDS

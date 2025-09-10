@@ -296,29 +296,29 @@ public:
             return;
 
         const auto& [order, orderIterator] = orders_.at(orderId);
-        // remove from order hashmap
-        orders_.erase(orderId);
-
+        
         // also remove from ask map with iterator as key O(1)
         if (order->GetSide() == Side::Sell)
-        {
-            auto price = order->GetPrice();
-            auto& orders = asks_.at(price);
-            orders.erase(orderIterator);
-            // check if there are still any sell orders at this price
-            if (orders.empty())
-                asks_.erase(price);
-        } else
-        {
-            auto price = order->GetPrice();
-            auto& orders = bids_.at(price);
-            orders.erase(orderIterator);
-            // check to see if any buy orders at this price 
-            if (orders.empty())
             {
-                bids_.erase(price);
+                auto price = order->GetPrice();
+                auto& orders = asks_.at(price);
+                orders.erase(orderIterator);
+                // check if there are still any sell orders at this price
+                if (orders.empty())
+                    asks_.erase(price);
+            } else
+            {
+                auto price = order->GetPrice();
+                auto& orders = bids_.at(price);
+                orders.erase(orderIterator);
+                // check to see if any buy orders at this price 
+                if (orders.empty())
+                    {
+                        bids_.erase(price);
+                    }
             }
-        }
+            // remove from order hashmap
+            orders_.erase(orderId);
     }
 
     Trades MatchOrder(OrderModify order)
