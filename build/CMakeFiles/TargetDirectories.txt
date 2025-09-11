@@ -1,3 +1,0 @@
-/Users/sanket/Desktop/c_projects/orderbook/build/CMakeFiles/orderbook.dir
-/Users/sanket/Desktop/c_projects/orderbook/build/CMakeFiles/edit_cache.dir
-/Users/sanket/Desktop/c_projects/orderbook/build/CMakeFiles/rebuild_cache.dir

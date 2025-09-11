@@ -381,9 +381,9 @@ int main()
     const OrderId orderId2 = 2;
     const OrderId orderId3 = 3;
     orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId1, Side::Buy, 100, 10));
-    // orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId2, Side::Buy, 100, 20));
+    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId2, Side::Buy, 100, 20));
     std::cout << orderbook.Size() << std::endl;
-    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId2, Side::Sell, 100, 20));
+    orderbook.AddOrder(std::make_shared<Order>(OrderType::GoodTillCancel, orderId3, Side::Sell, 100, 20));
     
 
     // orderbook.CancelOrder(orderId2);

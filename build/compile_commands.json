@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/Users/sanket/Desktop/c_projects/orderbook/build",
-  "command": "/usr/bin/clang++  -I/Users/sanket/Desktop/c_projects/orderbook -I/Users/sanket/Desktop/c_projects/orderbook/utils -g -O0 -std=gnu++20 -arch arm64 -o CMakeFiles/orderbook.dir/src/main.cpp.o -c /Users/sanket/Desktop/c_projects/orderbook/src/main.cpp",
-  "file": "/Users/sanket/Desktop/c_projects/orderbook/src/main.cpp",
-  "output": "CMakeFiles/orderbook.dir/src/main.cpp.o"
-}
-]
